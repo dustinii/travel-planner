@@ -59,6 +59,27 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-router.post('/login', async (req, res) => {});
+// post user login
+router.post('/login', async (req, res) => {
+  try {
+    const travellerData = await Traveller.findOne({ where: { email: req.body.email } });
+
+    if (!travellerData) {
+      res.status(400).json({ message: 'No traveller found with that email address!' });
+      return;
+    }
+
+    const validPassword = await bcrypt.compare(req.body.password, travellerData.password);
+
+    if (!validPassword) {
+      res.status(400).json({ message: 'Incorrect password!' });
+      return;
+    }
+
+    res.status(200).json({ user: travellerData, message: 'You are now logged in!' });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 
 module.exports = router;
