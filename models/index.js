@@ -22,4 +22,20 @@ Location.belongsToMany(Traveller, {
   as: 'location_travellers'
 });
 
+Trip.belongsTo(Traveller, {
+  foreignKey: 'traveller_id'
+});
+
+Trip.belongsTo(Location, {
+  foreignKey: 'location_id'
+});
+
+Traveller.hasMany(Trip, {
+  foreignKey: 'traveller_id'
+});
+
+Location.hasMany(Trip, {
+  foreignKey: 'location_id'
+});
+
 module.exports = { Traveller, Location, Trip };
